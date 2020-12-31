@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<_SerialPortSettings xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <_useWMI>false</_useWMI>
+  <_BaudRate>9600</_BaudRate>
+  <_Handshake>XOnXOff</_Handshake>
+  <_Parity>None</_Parity>
+  <_PortName>/dev/ttyUSB0</_PortName>
+  <_StopBits>One</_StopBits>
+  <_DataBits>8</_DataBits>
+</_SerialPortSettings>
