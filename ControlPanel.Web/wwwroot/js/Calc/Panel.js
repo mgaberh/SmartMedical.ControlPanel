@@ -1,8 +1,28 @@
-﻿$(document).ready(function () {
+﻿var connection = new signalR.HubConnectionBuilder().withUrl("/signalrhub").build();
+
+connection.on("ReceiveMessage", function (message, status) {
+    var encodedMsg = message + " - " + status;
+    var li = document.createElement("li");
+    li.textContent = encodedMsg;
+    document.getElementById("messagesList").appendChild(li);
+    updateScreen(message, status);
+});
+
+connection.start().then(function () {
+    var encodedMsg = "Connection started...";
+    var li = document.createElement("li");
+    li.textContent = encodedMsg;
+    document.getElementById("messagesList").appendChild(li);
+}).catch(function (err) {
+    return console.error(err.toString());
+});
+
+$(document).ready(function () {
     var result = 0;
     var prevEntry = 0;
     var operation = null;
     var currentEntry = '0';
+    var currentStatus = '0';
     updateScreen(result);
     $('.calculator').find('.button').each(function () {
         $('.button').attr("data-Status", "Ideal");
@@ -101,13 +121,59 @@ $('.button').on('click', function (evt) {
     //    operation = null;
     //}
 
-    updateScreen(currentEntry);
+    //updateScreen(currentEntry);
+    var message = currentEntry;
+    currentStatus = $(this).attr("data-Status");
+    var status = currentStatus;
+    //call SignalR function
+    connection.invoke("SendMessage", message, status).catch(function (err) {
+        return console.error(err.toString());
+    });
 
 });
-updateScreen = function (displayValue) {
-    var displayValue = displayValue.toString();
-    $('.screen').html(displayValue.substring(0, 10));
+updateScreen = function (message, status) {
+    debugger;
+
+    if (message == "9") {
+        $('.calculator').find('.button').each(function () {
+            $('.button').attr("data-Status", "Off");
+            $('.button').css('background-color', 'red');
+        });
+        $('.zero').css('background-color', 'white');
+        $('.nine').css('background-color', 'white');
+    }
+    else {
+        if (message == "0") {
+            $('.calculator').find('.button').each(function () {
+                $('.button').attr("data-Status", "On");
+                $('.button').css('background-color', 'green');
+            });
+            $('.zero').css('background-color', 'white');
+            $('.nine').css('background-color', 'white');
+
+        }
+        else {
+
+            var x = document.getElementsByClassName("button");
+            var i;
+            for (i = 0; i < x.length; i++) {
+                if (x[i].innerHTML == message) {
+                    if (status == "On") {
+                        x[i].setAttribute("data-Status", "On");
+                        x[i].style.backgroundColor = "green";
+
+                    }
+                    else {
+                        x[i].setAttribute("data-Status", "Off");
+                        x[i].style.backgroundColor = "red";
+                    }
+                    break;
+                }
+            }
+        }
+    }
 };
+
 CallApi = function (processId, processStatus) {
     var ProcessDto = new Object();
     ProcessDto.Id = processId;

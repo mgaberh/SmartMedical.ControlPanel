@@ -43,6 +43,9 @@ namespace ControlPanel.API.Controllers
 
             }
             _serialComms.Send(myArgs);
+            //Inquiry Status
+            myArgs = "status";
+            _serialComms.Send(myArgs);
             return Ok();
         }
         [HttpGet]

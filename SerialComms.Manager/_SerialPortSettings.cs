@@ -16,7 +16,7 @@ namespace SerialComms.Manager
     {
         #region Private_stores
         // Binding stores for public properties.
-        private string _portName = "COM8";
+        private string _portName = "COM3";
         private int _baudRate = 9600;
         private int _dataBits = 8;
         private Parity _parity = Parity.None;

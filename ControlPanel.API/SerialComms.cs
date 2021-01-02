@@ -44,7 +44,9 @@ namespace ControlPanel.API
             {
                 if (_str.Contains('#'))
                 {
-                    _status.Append(_str.Substring(_str.IndexOf('#') + 1, 8));
+                    _str = _str.Substring(_str.IndexOf('#') + 1);
+                    if (_str.Length == 8)
+                    _status.Append(_str);  
                 }
             }
             
